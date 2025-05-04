@@ -6,13 +6,6 @@
 from machine import ADC, Pin
 from time import sleep
 
-sensors = []
-sensor1 = ADC(28)
-sensor2 = ADC(27)
-
-sensors.append(sensor1)
-sensors.append(sensor2)
-
 class Story:
     """This class sets up the structure and functions for the stories in the 'mended laptop' project 
 
@@ -44,20 +37,23 @@ class Story:
         - instantiates the LED pin as an output pin 
         
         """
-        self.name = name    				# name of the associated Story information (person's name)
+        self.name = name					# name of the associated Story information (person's name)
         self.led_pin = led_pin				# LED pin
         self.adc_pin = adc_pin				# ADC pin
         self.en_path = en_path				# path to the English audio file 
         self.non_path = non_path			# path to the Non-English audio file 
-        self.voltage = voltage 				# voltage
-        self.entries.append(self)			# append the new object to the entries list
-        self.voltages.append(voltage)		# append the voltage to the voltages list 
+        self.voltage = voltage				# voltage
+        
         self.led = Pin(led_pin, Pin.OUT)	# initialize the LED Pin
         self.sensor = ADC(adc_pin)			# initialize the ADC Pin
-        
+
+        self.entries.append(self)			# append the new object to the entries list
+        self.voltages.append(voltage)		# append the voltage to the voltages list 
+    
     def __str__(self):
         return f"{self.name}, Index: {self.index}, LED: {self.led_pin}, ADC: {self.adc_pin}, {self.en_path}, {self.non_path}, Voltage: {self.voltage}"
- 
+        
+        
     @classmethod   
     def updateVoltage(cls, index, voltage):
         cls.voltages[index] = voltage
@@ -102,10 +98,12 @@ if __name__ == "__main__":
     print(Story.entries)
     print(Story.voltages)
     
+    #story1.setup()
+    
     while True: 
         # Read the ADC and update voltages (Will need to be replaced with SPI code for 8 channel ADC) 
         for i in range(len(Story.entries)):
-            voltages = Story.updateVoltage(i, sensors[i].read_u16())
+            voltages = Story.updateVoltage(i, Story.entries[i].sensor.read_u16())
             
         print(Story.voltages)
 
@@ -118,6 +116,8 @@ if __name__ == "__main__":
         sleep(2)
         Story.entries[ind].ledOff()
         sleep(2)
+        
+        
 
             
             
