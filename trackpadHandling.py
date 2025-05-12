@@ -48,11 +48,18 @@ class Story:
         self.sensor = ADC(adc_pin)			# initialize the ADC Pin
 
         self.entries_lst.append(self)			# append the new object to the entries list
+        self.index = len(self.entries_lst)      # create 
         self.voltages_lst.append(voltage)		# append the voltage to the voltages list 
     
     def __str__(self):
         return f"{self.name}, Index: {self.index}, LED: {self.led_pin}, ADC: {self.adc_pin}, {self.en_path}, {self.non_path}, Voltage: {self.voltage}"
         
+    @classmethod    
+    def __iter__(self):
+        self.n = 0
+        return self
+    
+
         
     @classmethod   
     def updateVoltage(cls, index, voltage):
@@ -99,10 +106,14 @@ class Story:
         
  
 if __name__ == "__main__":
-    story1 = Story("Vitti", 25, 28, "audio/vitti/en.wav", "audio/vitti/non.wav", 0)
-    story2 = Story("Denisa", 25, 27, "audio/denisa/en.wav", "audio/denisa/non.wav", 0)
+#    story1 = Story("Vitti", 25, 28, "audio/vitti/en.wav", "audio/vitti/non.wav", 0)
+#    story2 = Story("Denisa", 25, 27, "audio/denisa/en.wav", "audio/denisa/non.wav", 0)
+ 
+    stories = Story("Vitti", 25, 28, "audio/vitti/en.wav", "audio/vitti/non.wav", 0)
+    stories = Story("Denisa", 25, 27, "audio/denisa/en.wav", "audio/denisa/non.wav", 0) 
     
-#    print(Story.entries_lst)
+    
+    print(Story.entries_lst)
 #    print(Story.voltages_lst)
     
     while True: 
